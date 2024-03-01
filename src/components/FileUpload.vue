@@ -5,11 +5,7 @@ import AccommodationServices from "../services/accommodationServices.js";
 const props = defineProps({
     accommId: {
         type: Number,
-        required: true
-    },
-    isAdd: {
-        type: Boolean,
-        default: false
+        default: -1
     }
 })
 
@@ -62,7 +58,7 @@ const upload = async () => {
 };
 
 const getAccommodation = () => {
-    if(!props.isAdd) {
+    if(props.accommId != -1) {
         AccommodationServices.getById(props.accommId)
         .then((response) => {
             accommodation.value = response.data
@@ -81,22 +77,9 @@ onMounted(() => {
 
 <template>
     <div v-if="!infoLoading">
-        <v-row v-if="!showUpdate" class="align-center mb-2" no-gutters>
-            <v-text-field 
-                label="Explanation File" 
-                v-model="accommodation.explanationFile"
-                readonly 
-                hide-details
-            />
-            <v-btn
-                class="ml-2" 
-                color="button_blue"
-                @click="showUpdate = true"
-            > {{props.isAdd ? 'Add ' : 'Update'}} </v-btn>
-        </v-row>
-        <v-row v-else class="align-center" no-gutters>
+        <v-row class="align-center" no-gutters>
             <v-file-input 
-                :label="(props.isAdd ? 'Add' : 'New') + ' Explanation File'" 
+                label="Explanation File" 
                 v-model="currentFile"
                 prepend-inner-icon="mdi-paperclip" 
                 prepend-icon="null" 
