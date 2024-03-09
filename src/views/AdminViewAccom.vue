@@ -13,7 +13,6 @@
         try {
             const response = await AccommodationServices.getAll();
             accoms.value = response.data;
-            console.log(response)
         } catch (err) {
             console.log(err);
         }
@@ -24,7 +23,6 @@
             cats.value = response.data;
             setCategories();
             setDefaultCatValues();
-            console.log('cats:', response.data[1].name)
         } catch (err) {
             console.log(err)
         }
@@ -57,14 +55,13 @@
         router.push({ name: 'adminAccomManage'});
     }
     function editAccom(x){
-        console.log('test',x);
         router.push({ name: 'adminEditAccom', params: {accomID: x}});
     }
 </script>
 
 <template>
     <div>
-        <v-title class="text-h5" style="font-weight: bold;">View Accommodations</v-title>
+        <div class="text-h5" style="font-weight: bold;">View Accommodations</div>
     </div>
 
     <div>
