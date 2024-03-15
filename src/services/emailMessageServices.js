@@ -1,5 +1,6 @@
 import apiClient from "./services";
-var baseURL = "/emailMessages/";
+var baseURL = "/emailMessage/";
+
 
 export default {
     // Get all email messages
