@@ -21,13 +21,48 @@ import ocLogo from "/oc-logo-docked.svg";
           <SocialLogin />
         </v-col>
       </v-row>
-    </v-sheet>
-  </v-card>
+    </v-container>
+  </div>
 </template>
 
 <style scoped>
+.login-container {
+  min-height: 100vh;
+  background-color: rgb(250, 250, 250);
+}
+
 .right-aligned {
   position: absolute;
   right: 0;
+}
+
+.login-card {
+  border-radius: 16px;
+  padding: 32px;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.content-box {
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 16px;
+}
+
+.login-content {
+  margin-top: 24px;
+}
+
+@media (max-width: 600px) {
+  .login-card {
+    padding: 20px;
+    margin: 16px;
+  }
+  
+  .content-box {
+    padding: 16px;
+  }
 }
 </style>
