@@ -21,6 +21,7 @@ import AdminEditAccom from "./views/AdminEditAccom.vue"
 import AdminSemManage from "./views/AdminSemManage.vue"
 import AdminSemEdit from "./views/AdminSemEdit.vue"
 import AdminSemAdd from "./views/AdminSemAdd.vue"
+import AdminEmailLogs from "./views/AdminEmailLogs.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -130,6 +131,12 @@ const router = createRouter({
       component: AdminEditAccom,
       props: true,
     },
+    {
+      path: '/admin/email-logs', 
+      name: 'adminEmailLogs',
+      component: AdminEmailLogs,
+    },
+   
   ],
 });
 
