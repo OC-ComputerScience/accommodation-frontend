@@ -22,7 +22,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in emailLogs" :key="item.emailLogId">
+          <tr v-for="item in filteredLogs" :key="item.emailLogId">
             <td>{{ item.emailLogId }}</td>
             <td>{{ formatDateTime(item.date) }}</td>
             <td>{{ item.category }}</td>
@@ -41,12 +41,17 @@
           </tr>
         </tbody>
       </v-table>
+
+      <!-- No results message -->
+      <v-card-text v-if="filteredLogs.length === 0" class="text-center">
+        No matching records found
+      </v-card-text>
     </v-card>
   </v-container>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import emailLogServices from '../services/emailLogServices';
 
 const search = ref('');
@@ -61,6 +66,23 @@ const headers = [
   { title: 'To', key: 'toEmailAddress' },
   { title: 'Message', key: 'messageContent' }
 ];
+
+// Computed property for filtered logs
+const filteredLogs = computed(() => {
+  if (!search.value) return emailLogs.value;
+  
+  const searchTerm = search.value.toLowerCase();
+  return emailLogs.value.filter(log => {
+    return (
+      log.emailLogId.toString().includes(searchTerm) ||
+      log.category?.toLowerCase().includes(searchTerm) ||
+      log.senderEmail?.toLowerCase().includes(searchTerm) ||
+      log.toEmailAddress?.toLowerCase().includes(searchTerm) ||
+      log.messageContent?.toLowerCase().includes(searchTerm) ||
+      (log.date && formatDateTime(log.date).toLowerCase().includes(searchTerm))
+    );
+  });
+});
 
 const formatDateTime = (date) => {
   return date ? new Date(date).toLocaleString() : '';
@@ -102,7 +124,16 @@ tbody tr:nth-child(even) {
   background-color: #fafafa;
 }
 
+tbody tr:hover {
+  background-color: #f0f0f0;
+}
+
 td, th {
   padding: 12px !important;
+}
+
+/* Loading state styles */
+.v-table tr td {
+  height: 48px;
 }
 </style>
