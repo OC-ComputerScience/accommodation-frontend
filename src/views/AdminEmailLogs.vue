@@ -25,6 +25,7 @@
           <tr v-for="item in filteredLogs" :key="item.emailLogId">
             <td>{{ item.emailLogId }}</td>
             <td>{{ formatDateTime(item.date) }}</td>
+            <td>{{ getStudentName(item.studentId) }}</td>
             <td>{{ item.category }}</td>
             <td>{{ item.senderEmail }}</td>
             <td>{{ item.toEmailAddress }}</td>
@@ -42,7 +43,6 @@
         </tbody>
       </v-table>
 
-      <!-- No results message -->
       <v-card-text v-if="filteredLogs.length === 0" class="text-center">
         No matching records found
       </v-card-text>
@@ -53,32 +53,36 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import emailLogServices from '../services/emailLogServices';
+import studentServices from '../services/studentServices';
 
 const search = ref('');
 const loading = ref(false);
 const emailLogs = ref([]);
+const students = ref(new Map()); // Cache for student data
 
 const headers = [
   { title: 'ID', key: 'emailLogId' },
   { title: 'Date', key: 'date' },
+  { title: 'Student', key: 'student' },
   { title: 'Category', key: 'category' },
   { title: 'From', key: 'senderEmail' },
   { title: 'To', key: 'toEmailAddress' },
   { title: 'Message', key: 'messageContent' }
 ];
 
-// Computed property for filtered logs
 const filteredLogs = computed(() => {
   if (!search.value) return emailLogs.value;
   
   const searchTerm = search.value.toLowerCase();
   return emailLogs.value.filter(log => {
+    const studentName = getStudentName(log.studentId)?.toLowerCase();
     return (
       log.emailLogId.toString().includes(searchTerm) ||
       log.category?.toLowerCase().includes(searchTerm) ||
       log.senderEmail?.toLowerCase().includes(searchTerm) ||
       log.toEmailAddress?.toLowerCase().includes(searchTerm) ||
       log.messageContent?.toLowerCase().includes(searchTerm) ||
+      studentName?.includes(searchTerm) ||
       (log.date && formatDateTime(log.date).toLowerCase().includes(searchTerm))
     );
   });
@@ -88,11 +92,35 @@ const formatDateTime = (date) => {
   return date ? new Date(date).toLocaleString() : '';
 };
 
+const getStudentName = (studentId) => {
+  return students.value.get(studentId) || 'Loading...';
+};
+
+const fetchStudentData = async (studentId) => {
+  if (!students.value.has(studentId) && studentId) {
+    try {
+      const response = await studentServices.getOne(studentId); // Updated to use your service method
+      const student = response.data;
+      students.value.set(studentId, `${student.fName} ${student.lName}`);
+    } catch (error) {
+      console.error(`Error fetching student ${studentId}:`, error);
+      students.value.set(studentId, 'Error loading student');
+    }
+  }
+};
+
 const fetchEmailLogs = async () => {
   loading.value = true;
   try {
     const response = await emailLogServices.getAllEmailLogs();
     emailLogs.value = response.data;
+    // Fetch student data for all logs
+    await Promise.all(
+      emailLogs.value
+        .map(log => log.studentId)
+        .filter(id => id != null)
+        .map(fetchStudentData)
+    );
   } catch (error) {
     console.error('Error:', error);
   }
@@ -132,7 +160,6 @@ td, th {
   padding: 12px !important;
 }
 
-/* Loading state styles */
 .v-table tr td {
   height: 48px;
 }
