@@ -96,8 +96,9 @@ const clearFilters = () => {
 };
 
 const formatDate = (date) => {
-  return moment(String(date)).format("MM/DD/YYYY");
+  return moment(String(date)).format("DD/MM/YYYY"); // Changed format here
 };
+
 
 const addAccom = (request) => {
   // Add code here to change the route.
@@ -150,19 +151,25 @@ const closeRequest = (request) => {
           <td>{{ request.student.email }}</td>
           <td>{{ formatDate(request.dateMade) }}</td>
           <td>
-            <!--TODO: Add function call stubs to both these-->
-            <!--Add will router-link to AddAccom page--make sure I know what this page is called-->
-            <v-btn color="button_blue" @click="addAccom(request)"
-              >Approve Request
-            </v-btn>
-            <!--Close should open a dialog box asking if the user is sure which allows closing of the request without adding accommodations-->
-            <v-btn
-              flat
-              color="primary"
-              @click="(closeModal = true), (selectedRequest = request)"
-              >Close
-            </v-btn>
-          </td>
+  <!-- Approve Request Button with spacing -->
+  <v-btn 
+    color="button_blue" 
+    @click="addAccom(request)" 
+    style="margin-right: 20px;"
+  >
+    Approve Request
+  </v-btn>
+  
+  <!-- Close Button -->
+  <v-btn
+    flat
+    color="primary"
+    @click="(closeModal = true), (selectedRequest = request)"
+  >
+    Close
+  </v-btn>
+</td>
+
         </tr>
       </tbody>
     </v-table>
@@ -295,4 +302,5 @@ const closeRequest = (request) => {
     />
   </v-dialog>
 </template>
-<style></style>
+<style>
+</style>

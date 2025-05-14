@@ -1,6 +1,7 @@
 <script setup>
 import RequestForm from "../components/RequestForm.vue";
 import Permissions from "../components/Permissions.vue";
+import RequestSuccess from "../components/RequestSuccess.vue";
 
 import router from "../router";
 import { onBeforeMount, ref, watch } from "vue";
@@ -11,6 +12,7 @@ import Utils from "../config/utils";
 import SemesterServices from "../services/semesterServices";
 import userServices from "../services/userServices";
 
+
 const user = ref(null);
 const requestForm = ref(false);
 const noPermission = ref(false);
@@ -18,7 +20,7 @@ const student = ref({});
 const allRequests = ref([]);
 const studentAccoms = ref([]);
 const filteredSemesterAccoms = ref([]);
-
+const isVisible = ref(false);
 const openRequestCount = ref(0);
 const selectedSemId = ref();
 
@@ -121,7 +123,13 @@ const addConsent = async (ocStudentId) => {
 const handleCreate = (selectedSemId) => {
   createRequest(selectedSemId);
   requestForm.value = false;
+  isVisible.value = true;
 };
+
+const toggleClose = () => {
+  isVisible.value = false;
+  console.log(isVisible.value);
+}
 
 const createRequest = async (selectedSemId) => {
   const data = {
@@ -180,8 +188,14 @@ watch(selectedSemId, () => {
 //END CREATE REQUEST METHODS
 </script>
 
+
 <template>
+<RequestSuccess
+v-show="isVisible"
+@click="toggleClose()">
+</RequestSuccess>
   <div class="pa-5">
+  
     <div>
       <p class="text-h6 text-left">Hello, {{ user.fName }}!</p>
       <p class="text-h6 mt-4 text-left">
