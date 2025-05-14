@@ -5,6 +5,8 @@ import SemesterServices from "../services/semesterServices.js";
 import moment from "moment";
 import CloseModal from "../components/CloseModal.vue";
 import router from "../router";
+// import utilServices from "../services/utilServices";
+
 
 // Holds all open requests with their associated Student
 const openRequests = ref([]);
@@ -57,6 +59,8 @@ const getClosedRequests = async () => {
   unfilteredClosedRequests.value = response.data;
   closedReqBool.value = response.data.length > 0;
 };
+
+
 
 const filterClosedRequests = () => {
   closedReqBool.value = true;
@@ -118,6 +122,7 @@ const closeRequest = (request) => {
     studendId: request.studentId,
   };
 
+
   RequestServices.update(updatedRequest.requestId, updatedRequest)
     .then(() => {
       loadRequests();
@@ -129,6 +134,9 @@ const closeRequest = (request) => {
   selectedRequest.value = null;
   closeModal.value = false;
 };
+
+
+
 </script>
 
 <template>
@@ -152,13 +160,17 @@ const closeRequest = (request) => {
           <td>{{ formatDate(request.dateMade) }}</td>
           <td>
   <!-- Approve Request Button with spacing -->
-  <v-btn 
+   <v-btn 
     color="button_blue" 
     @click="addAccom(request)" 
     style="margin-right: 20px;"
   >
     Approve Request
-  </v-btn>
+  </v-btn> 
+
+
+
+
   
   <!-- Close Button -->
   <v-btn
@@ -197,6 +209,7 @@ const closeRequest = (request) => {
             Filters
           </v-btn>
         </template>
+
 
         <v-card min-width="300" class="mainCardBorder mt-2">
           <v-card-text>
