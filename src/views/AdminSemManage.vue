@@ -21,9 +21,9 @@ onMounted(async () => {
 });
 
 function deleteSem(semesterId) {
-  SemesterServices.delete(semesterId)
+  SemesterServices.deleteSemester(semesterId)
     .then(() => {
-      router.go();
+      getSemesters();
     })
     .catch((error) => {
       console.error("Error deleting semester:", error);
