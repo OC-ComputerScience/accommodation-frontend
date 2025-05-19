@@ -140,7 +140,7 @@ if (!student.value.studentId) {
 }
 console.log("here's the selected semester id: ", selectedSemId);
   const data = {
-    semesterId: selectedSemId,
+    semesterId: selectedSemId.semesterId,
     studentId: student.value.studentId,
     email: student.value.email,
   };
