@@ -145,7 +145,7 @@ async function save() {
   if (catSelected) {
     console.log("📩 Sending Chapel email...");
     const catData = { ...data, accomCatIds: selectedAccomCatIds.value };
-    utilServices.emailChapel(catData)
+    utilServices.emailCategoryTemplate(catData)
       .then((res) => {
         console.log("✅ Chapel email sent", res.data);
         emailsSent++;

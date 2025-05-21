@@ -10,7 +10,7 @@ const emailCategory = (data) => {
 export default {
   emailCategory,
 
-    emailChapel(data) {
+    emailCategoryTemplate(data) {
         return apiClient.post(baseURL + `emailChapel`, data); // 🟢 Change here
       },
       emailFaculty(data) {
