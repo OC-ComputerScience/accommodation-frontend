@@ -14,6 +14,7 @@ import { watch } from "vue";
 
 const accommodations = ref([]);
 const request = ref([]);
+const selectedAccomCatIds = ref([]);
 const route = useRoute();
 const accomCategory = ref([]);
 const params = computed(() => route.params);
@@ -61,12 +62,9 @@ async function getAccomCat() {
   await accomCatServices
     .getAll()
     .then((response) => {
-      //console.log(response);
       accomCategory.value = response.data;
-      // console.log(accomCategory);
       console.log("these are the values for accomCategory: " + JSON.stringify(accomCategory.value)); // console.log(accomCategory.value);
       subject.value = accomCategory.value.accomcat;
-      // console.log("accomCategory.value.name", subject.value);
     })
     .catch((err) => {
       console.log(err);
@@ -91,7 +89,7 @@ async function save() {
   console.log("Selected Accommodations:", selectedAccommodations.value);
 
   let promises = [];
-  let chapelSelected = false;
+  let catSelected = false;
   let academicsSelected = false;
 
   for (const accomId in selectedAccommodations.value) {
@@ -112,7 +110,10 @@ async function save() {
       promises.push(studentAccomServices.create(studentAccomData));
 
       // Check which categories were selected
-      if (accom.categoryName === "Chapel") chapelSelected = true;
+      if (accom.categoryName === "Chapel" || accom.categoryName === "Meals" || accom.categoryName === "Housing") {
+        catSelected = true;
+        selectedAccomCatIds.value.push(accom.accomCatId);
+      }
       if (accom.categoryName === "Academics") academicsSelected = true;
     }
   }
@@ -135,15 +136,16 @@ async function save() {
   let emailErrors = 0;
 
   const navigateIfDone = () => {
-    if ((chapelSelected || academicsSelected) && (emailsSent + emailErrors >= (chapelSelected + academicsSelected))) {
+    if ((catSelected || academicsSelected) && (emailsSent + emailErrors >= (catSelected + academicsSelected))) {
       console.log("✅ Emails processed. Redirecting...");
       router.push({ name: "adminHome" });
     }
   };
 
-  if (chapelSelected) {
+  if (catSelected) {
     console.log("📩 Sending Chapel email...");
-    utilServices.emailChapel(data)
+    const catData = { ...data, accomCatIds: selectedAccomCatIds.value };
+    utilServices.emailChapel(catData)
       .then((res) => {
         console.log("✅ Chapel email sent", res.data);
         emailsSent++;
@@ -171,7 +173,7 @@ async function save() {
       });
   }
 
-  if (!chapelSelected && !academicsSelected) {
+  if (!catSelected && !academicsSelected) {
     // No emails to send
     router.push({ name: "adminHome" });
   }
@@ -208,11 +210,11 @@ function findAccomById(id) {
       <div class="pb-5">
         <p class="text-h6">{{ ac.name }}</p>
         <button v-if="ac.name === 'Chapel'" @click="sendChapelEmail">
-            Send Chapel Email
-          </button>
-          <button v-if="ac.name === 'Academics'" @click="sendAcademicsEmail">
-            Send Academics Email
-          </button>
+          Send Chapel Email
+        </button>
+        <button v-if="ac.name === 'Academics'" @click="sendAcademicsEmail">
+          Send Academics Email
+        </button>
         <div>
           <v-card class="rounded-0" style="background-color: #d5dfe7">
             <div v-for="a in accommodations" :key="a.id">
