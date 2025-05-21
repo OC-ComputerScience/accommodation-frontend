@@ -132,9 +132,17 @@ const toggleClose = () => {
 }
 
 const createRequest = async (selectedSemId) => {
+  console.log("Student ID before request:", student.value.studentId); // Debugging log
+
+if (!student.value.studentId) {
+  console.error("Error: studentId is undefined. Cannot create request.");
+  return;
+}
+console.log("here's the selected semester id: ", selectedSemId);
   const data = {
     semesterId: selectedSemId.semesterId,
     studentId: student.value.studentId,
+    email: student.value.email,
   };
 
   await RequestServices.create(data)
@@ -258,3 +266,4 @@ v-show="isVisible"
     </v-dialog>
   </div>
 </template>
+
