@@ -12,10 +12,6 @@ let semesterRules = [
 
 let dateRules = [
   (value) => !!value || "Date is required",
-  (value) =>
-    /^(0?[1-9]|1[1,2])(\/|-)(0?[1-9]|[12][0-9]|3[01])(\/|-)(19|20)\d{2}/.test(
-      value
-    ) || "Use DD/MM/YYYY must be valid",
 ];
 
 function save() {
@@ -49,6 +45,7 @@ function cancel() {
             label=""
             v-model="semester.startDate"
             :rules="dateRules"
+            type="date"
           ></v-text-field>
           <p class="pl-5" style="font-weight: bold">End Date</p>
           <v-text-field
@@ -56,6 +53,7 @@ function cancel() {
             label=""
             v-model="semester.endDate"
             :rules="dateRules"
+            type="date"
           ></v-text-field>
         </div>
       </div>
