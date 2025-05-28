@@ -57,7 +57,6 @@ async function getAccom(){
 const uploadExplanationFile = async () => {
   errorMessage.value = ""
   if (!currentFile.value) {
-    console.log("Please select a file!")
     message.value = "Please select a file!";
     return;
   }
@@ -68,6 +67,7 @@ const uploadExplanationFile = async () => {
     const response = await AccommodationServices.uploadExplanationFile(props.accomID, currentFile.value);
 
     message.value = response.data.message;
+    console.log(message.value);
 
   } catch (error) {
     if(error.request.status == 404) {

@@ -33,7 +33,6 @@ async function getAccomm() {
     .getAll()
     .then((response) => {
       accommodations.value = response.data;
-      // console.log('accommodations: ', accommodations.value);
       accommodations.value.forEach((accomm) => {
         accomm.chapelChkBox = false;
       });
@@ -46,7 +45,6 @@ async function getRequest() {
   await requestServices
     .getOne(requestId)
     .then((response) => {
-      //console.log(request);
       request.value = response.data;
       semester.value = request.value.semester.semester;
       year.value = request.value.semester.year;
@@ -63,7 +61,6 @@ async function getAccomCat() {
     .getAll()
     .then((response) => {
       accomCategory.value = response.data;
-      console.log("these are the values for accomCategory: " + JSON.stringify(accomCategory.value)); // console.log(accomCategory.value);
       subject.value = accomCategory.value.accomcat;
     })
     .catch((err) => {
@@ -86,31 +83,26 @@ function cancel() {
 
 
 async function save() {
-  console.log("Selected Accommodations:", selectedAccommodations.value);
 
-  let promises = [];
   let catSelected = false;
   let academicsSelected = false;
+
+  const studentAccoms = [];
 
   for (const accomId in selectedAccommodations.value) {
     if (selectedAccommodations.value[accomId]) {
       const accom = findAccomById(parseInt(accomId));
       if (!accom) continue;
 
-      const studentAccomData = {
+      studentAccoms.push({
         accomId: accom.accomId,
         accomCatId: accom.accomCatId,
         data: null,
-        createdAt: new Date(),
-        updatedAt: new Date(),
         semesterId: request.value.semesterId,
         studentId: request.value.studentId,
-      };
+      });
 
-      promises.push(studentAccomServices.create(studentAccomData));
-
-      // Check which categories were selected
-      if (accom.categoryName === "Chapel" || accom.categoryName === "Meals" || accom.categoryName === "Housing") {
+      if (["Chapel", "Meals", "Housing"].includes(accom.categoryName)) {
         catSelected = true;
         selectedAccomCatIds.value.push(accom.accomCatId);
       }
@@ -118,8 +110,14 @@ async function save() {
     }
   }
 
-  await Promise.all(promises);
-  console.log("✅ All selected accommodations saved.");
+  // ✅ Now send everything in ONE request
+  await studentAccomServices.create({
+    studentAccoms,
+    studentId: request.value.studentId,
+    semesterId: request.value.semesterId,
+  });
+
+
 
   await requestServices.update(requestId, {
     approvedBy: user.fName + " " + user.lName,
@@ -137,37 +135,30 @@ async function save() {
 
   const navigateIfDone = () => {
     if ((catSelected || academicsSelected) && (emailsSent + emailErrors >= (catSelected + academicsSelected))) {
-      console.log("✅ Emails processed. Redirecting...");
       router.push({ name: "adminHome" });
     }
   };
 
   if (catSelected) {
-    console.log("📩 Sending Chapel email...");
     const catData = { ...data, accomCatIds: selectedAccomCatIds.value };
     utilServices.emailCategoryTemplate(catData)
       .then((res) => {
-        console.log("✅ Chapel email sent", res.data);
         emailsSent++;
         navigateIfDone();
       })
       .catch((err) => {
-        console.error("❌ Chapel email error", err.response || err);
         emailErrors++;
         navigateIfDone();
       });
   }
 
   if (academicsSelected) {
-    console.log("📩 Sending Academics email...");
     utilServices.emailFaculty(data)
       .then((res) => {
-        console.log("✅ Academics email sent", res.data);
         emailsSent++;
         navigateIfDone();
       })
       .catch((err) => {
-        console.error("❌ Academics email error", err.response || err);
         emailErrors++;
         navigateIfDone();
       });
