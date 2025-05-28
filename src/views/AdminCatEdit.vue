@@ -14,10 +14,8 @@
     let catEmail = ref('');
 
     onMounted(async () => {
-        console.log("In edit with emailMessageId: " + props.accomCatId);
     const accomCat = await accomCatServices.getOne(props.accomCatId);
     catName.value = accomCat.data.name;
-    console.log("Email: " + accomCat.data.email)
     catEmail.value = accomCat.data.email;
 });
 
