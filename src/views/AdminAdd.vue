@@ -10,6 +10,7 @@ import Utils from "../config/utils";
 import accomCatServices from "../services/accomCatServices";
 import utilServices from "../services/utilServices";
 import { watch } from "vue";
+import RequestApproval from "../components/RequestApproval.vue";
 
 
 const accommodations = ref([]);
@@ -27,6 +28,9 @@ const subject = ref();
 const body = ref("");
 const recipient = ref("");
 let user = Utils.getStore("user");
+const approval = ref(false);
+const selectedAccoms = ref(null);
+
 
 async function getAccomm() {
   await accommServices
@@ -41,6 +45,21 @@ async function getAccomm() {
       console.log(err);
     });
 }
+
+function getSelectedAccom(studentId, semesterId) {
+  studentAccomServices
+    .getAllForStudent(studentId)
+    .then((response) => {
+      selectedAccoms.value = response.data.filter(item => item.semesterId === semesterId).map(item => item.accomId);
+      selectedAccoms.value.forEach(id => {
+        selectedAccommodations.value[id] = true;
+      })
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
 async function getRequest() {
   await requestServices
     .getOne(requestId)
@@ -50,6 +69,7 @@ async function getRequest() {
       year.value = request.value.semester.year;
       fName.value = request.value.student.fName;
       lName.value = request.value.student.lName;
+      getSelectedAccom(request.value.studentId, request.value.semesterId);
 
     })
     .catch((err) => {
@@ -61,6 +81,11 @@ async function getAccomCat() {
     .getAll()
     .then((response) => {
       accomCategory.value = response.data;
+      accomCategory.value = response.data.filter(
+        item =>
+          item.name !== "student_accommodation_request_received" &&
+          item.name !== "student_accommodation_approved"
+      );
       subject.value = accomCategory.value.accomcat;
     })
     .catch((err) => {
@@ -187,7 +212,7 @@ function findAccomById(id) {
 
       <v-btn class="ml-4" color="primary" style="float: right" @click="cancel()">cancel</v-btn>
 
-      <v-btn class="ml-4" color="blue" style="float: right" @click="save()">save</v-btn>
+      <v-btn class="ml-4" color="blue" style="float: right" @click="approval = true">save</v-btn>
     </div>
     <p style="font-weight: bold" class="pt-2 pl-4 text-h5">
       {{ fName }} {{ lName }}
@@ -200,12 +225,6 @@ function findAccomById(id) {
     <div class="ml-10 mr-16">
       <div class="pb-5">
         <p class="text-h6">{{ ac.name }}</p>
-        <button v-if="ac.name === 'Chapel'" @click="sendChapelEmail">
-          Send Chapel Email
-        </button>
-        <button v-if="ac.name === 'Academics'" @click="sendAcademicsEmail">
-          Send Academics Email
-        </button>
         <div>
           <v-card class="rounded-0" style="background-color: #d5dfe7">
             <div v-for="a in accommodations" :key="a.id">
@@ -222,6 +241,11 @@ function findAccomById(id) {
   <div class="ma-6">
     <v-btn class="ml-4" color="primary" style="float: right" @click="cancel()">cancel</v-btn>
 
-    <v-btn class="ml-4" color="blue" style="float: right" @click="save()">save</v-btn>
+    <v-btn class="ml-4" color="blue" style="float: right" @click="approval = true">save</v-btn>
   </div>
+  <!--Dialog box-->
+  <v-dialog v-model="approval" width="auto">
+    <RequestApproval :selectedAccoms="selectedAccommodations" :accommodations="accommodations" @save="save()"
+      @cancel="(approval = false)" />
+  </v-dialog>
 </template>
