@@ -50,7 +50,7 @@ function getSelectedAccom(studentId, semesterId) {
   studentAccomServices
     .getAllForStudent(studentId)
     .then((response) => {
-      selectedAccoms.value = response.data.filter(item => item.semesterId === semesterId).map(item => item.accomId);
+      selectedAccoms.value = response.data.filter(item => item.semesterId === semesterId && item.status === "Approved").map(item => item.accomId);
       selectedAccoms.value.forEach(id => {
         selectedAccommodations.value[id] = true;
       })
@@ -125,6 +125,7 @@ async function save() {
         data: null,
         semesterId: request.value.semesterId,
         studentId: request.value.studentId,
+        adminId: Utils.getStore("user").userId
       });
 
       if (["Chapel", "Meals", "Housing"].includes(accom.categoryName)) {

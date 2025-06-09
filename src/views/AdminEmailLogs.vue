@@ -36,7 +36,8 @@
                     {{ item.messageContent }}
                   </span>
                 </template>
-                <span>{{ item.messageContent }}</span>
+                <span class="d-inline-block" style="max-width: 300px; white-space: normal; word-wrap: break-word;">{{
+                  item.messageContent }}</span>
               </v-tooltip>
             </td>
           </tr>
