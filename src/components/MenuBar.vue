@@ -33,6 +33,10 @@ const maintainenceActions = [
     title: "Emails",
     component: "adminEmailManage",
   },
+  {
+    title: "Email Logs",
+    component: "adminEmailLogs",
+  },
 ];
 
 const resetMenu = () => {
