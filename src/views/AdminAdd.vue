@@ -1,16 +1,14 @@
 <script setup>
+import { onMounted, ref } from "vue";
+import { useRoute } from "vue-router";
+import RequestApproval from "../components/RequestApproval.vue";
+import Utils from "../config/utils";
+import router from "../router";
+import accomCatServices from "../services/accomCatServices";
 import accommServices from "../services/accommodationServices.js";
 import requestServices from "../services/requestServices.js";
 import studentAccomServices from "../services/studentAccomServices";
-import { ref, onMounted } from "vue";
-import { useRoute } from "vue-router";
-import { computed } from "vue";
-import router from "../router";
-import Utils from "../config/utils";
-import accomCatServices from "../services/accomCatServices";
 import utilServices from "../services/utilServices";
-import { watch } from "vue";
-import RequestApproval from "../components/RequestApproval.vue";
 
 
 const accommodations = ref([]);
@@ -18,15 +16,12 @@ const request = ref([]);
 const selectedAccomCatIds = ref([]);
 const route = useRoute();
 const accomCategory = ref([]);
-const params = computed(() => route.params);
 const requestId = route.params.id;
 const semester = ref();
 const year = ref();
 const fName = ref();
 const lName = ref();
 const subject = ref();
-const body = ref("");
-const recipient = ref("");
 let user = Utils.getStore("user");
 const approval = ref(false);
 const selectedAccoms = ref(null);
@@ -109,8 +104,8 @@ function cancel() {
 
 async function save() {
 
-  let catSelected = false;
-  let academicsSelected = false;
+  let isCategorySelected = false;
+  let isAcademicsSelected = false;
 
   const studentAccoms = [];
 
@@ -129,10 +124,10 @@ async function save() {
       });
 
       if (["Chapel", "Meals", "Housing"].includes(accom.categoryName)) {
-        catSelected = true;
+        isCategorySelected = true;
         selectedAccomCatIds.value.push(accom.accomCatId);
       }
-      if (accom.categoryName === "Academics") academicsSelected = true;
+      if (accom.categoryName === "Academics") isAcademicsSelected = true;
     }
   }
 
@@ -160,37 +155,37 @@ async function save() {
   let emailErrors = 0;
 
   const navigateIfDone = () => {
-    if ((catSelected || academicsSelected) && (emailsSent + emailErrors >= (catSelected + academicsSelected))) {
+    if ((isCategorySelected || isAcademicsSelected) && (emailsSent + emailErrors >= (isCategorySelected + isAcademicsSelected))) {
       router.push({ name: "adminHome" });
     }
   };
 
-  if (catSelected) {
+  if (isCategorySelected) {
     const catData = { ...data, accomCatIds: selectedAccomCatIds.value };
     utilServices.emailCategoryTemplate(catData)
-      .then((res) => {
+      .then(() => {
         emailsSent++;
         navigateIfDone();
       })
-      .catch((err) => {
+      .catch(() => {
         emailErrors++;
         navigateIfDone();
       });
   }
 
-  if (academicsSelected) {
+  if (isAcademicsSelected) {
     utilServices.emailFaculty(data)
-      .then((res) => {
+      .then(() => {
         emailsSent++;
         navigateIfDone();
       })
-      .catch((err) => {
+      .catch(() => {
         emailErrors++;
         navigateIfDone();
       });
   }
 
-  if (!catSelected && !academicsSelected) {
+  if (!isCategorySelected && !isAcademicsSelected) {
     // No emails to send
     router.push({ name: "adminHome" });
   }
