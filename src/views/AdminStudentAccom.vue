@@ -24,8 +24,10 @@
                     studentAccom.value = response.data;
                 })
                 .catch((err) => {
-                    if(err.response && err.response.status === 404)
+                    if(err.response && err.response.status === 404){
                         noDataMsg.value = `No data found for student with ID ${searchValue.value}`;
+                        studentAccom.value = [];
+                    } 
                 });
         }
         else if(filterType.value == "Semester") { //find by semester
@@ -36,8 +38,10 @@
                     studentAccom.value = response.data;
                 })
                 .catch((err) => {
-                    if(err.response && err.response.status === 404)
-                        noDataMsg.value = `No data found for Semester ${searchValue.value}`;
+                    if(err.response && err.response.status === 404){
+                        noDataMsg.value = `No data found for Semester ${searchValue.value.title}`;
+                        studentAccom.value = [];
+                    }
                 });
         } else return;
         //loop through studentAccom to parse data and put in array
@@ -74,8 +78,14 @@
         });
         if(studentAccom.value.length < 1){
             showEmpty.value = true;
+            showTable.value = false;
+            tableData.value = [];
         }
-        else showTable.value = true;
+        else {
+            showTable.value = true;
+            showEmpty.value = false;
+            noDataMsg.value = null;
+        }
     }
     const retrieveSemesters = async () => {
   try {
@@ -173,7 +183,7 @@ onMounted(async () => {
                 </div>
             </v-card>
             <div v-if="showEmpty" class="ma-6 text-center">
-                Sorry, we couldn't find any student accommodations for "{{ searchValue }}". Please adjust the filters and try again.
+                Sorry, we couldn't find any student accommodations for "{{ searchValue.title ? searchValue.title : searchValue }}". Please adjust the filters and try again.
             </div>
 
         </div>
