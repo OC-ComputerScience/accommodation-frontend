@@ -208,7 +208,7 @@ function findAccomById(id) {
 
       <v-btn class="ml-4" color="primary" style="float: right" @click="cancel()">cancel</v-btn>
 
-      <v-btn class="ml-4" color="blue" style="float: right" @click="approval = true">save</v-btn>
+      <v-btn class="ml-4" color="blue" style="float: right" @click="approval = true">approve</v-btn>
     </div>
     <p style="font-weight: bold" class="pt-2 pl-4 text-h5">
       {{ fName }} {{ lName }}
@@ -237,11 +237,11 @@ function findAccomById(id) {
   <div class="ma-6">
     <v-btn class="ml-4" color="primary" style="float: right" @click="cancel()">cancel</v-btn>
 
-    <v-btn class="ml-4" color="blue" style="float: right" @click="approval = true">save</v-btn>
+    <v-btn class="ml-4" color="blue" style="float: right" @click="approval = true">approve</v-btn>
   </div>
   <!--Dialog box-->
   <v-dialog v-model="approval" width="auto">
-    <RequestApproval :selectedAccoms="selectedAccommodations" :accommodations="accommodations" @save="save()"
+    <RequestApproval :selectedAccoms="selectedAccommodations" :accommodations="accommodations" :fName="fName" :lName="lName" @save="save()"
       @cancel="(approval = false)" />
   </v-dialog>
 </template>

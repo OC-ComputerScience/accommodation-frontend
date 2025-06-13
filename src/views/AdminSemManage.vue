@@ -64,13 +64,6 @@ function addSem() {
         <td>
           <v-btn
             class="mr-4"
-            color="primary"
-            style="float: right"
-            @click="deleteSem(a.semesterId)"
-            >delete</v-btn
-          >
-          <v-btn
-            class="mr-4"
             color="button_blue"
             style="float: right"
             @click="editSem(a.semesterId)"
