@@ -23,7 +23,6 @@
         </thead>
         <tbody>
           <tr v-for="item in filteredLogs" :key="item.emailLogId">
-            <td>{{ item.emailLogId }}</td>
             <td>{{ formatDateTime(item.date) }}</td>
             <td>{{ getStudentName(item.studentId) }}</td>
             <td>{{ item.category }}</td>
@@ -62,7 +61,6 @@ const emailLogs = ref([]);
 const students = ref(new Map()); // Cache for student data
 
 const headers = [
-  { title: 'ID', key: 'emailLogId' },
   { title: 'Date', key: 'date' },
   { title: 'Student', key: 'student' },
   { title: 'Category', key: 'category' },

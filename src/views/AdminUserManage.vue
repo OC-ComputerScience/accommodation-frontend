@@ -71,15 +71,8 @@ function deleteUser(id) {
             v-model="select[index]"
           ></v-combobox>
         </td>
-        <td>{{ u.studentId }}</td>
+        <td class="pa-4">{{ u.studentId }}</td>
         <td class="pa-4">
-          <v-btn
-            class="mr-4"
-            color="primary"
-            style="float: right"
-            @click="deleteUser(u.id)"
-            >delete</v-btn
-          >
           <v-btn
             class="mr-4"
             color="button_blue"
