@@ -46,8 +46,10 @@ function save(a, index) {
   AccommodationServices.update(a.accomId, accomData);
   this.router.go();
 }
-function deleteUser(id) {
-  AccommodationServices.delete(id);
+function changeStatus(data) {
+  if (data.status == "Inactive") data.status = "active";
+  else data.status = "Inactive";
+  AccommodationServices.update(data.accomId, data)
   this.router.go();
 }
 function newAccom() {
@@ -92,9 +94,9 @@ function editAccom(x) {
           <v-btn
             class="mr-4"
             color="primary"
-            style="float: right"
-            @click="deleteUser(a.accomId)"
-            >delete</v-btn
+            style="float: right; min-width: 10em;"
+            @click="changeStatus(a)"
+            > {{a.status === "active" ? "deactivate" : "activate"}}</v-btn
           >
           <v-btn
             class="mr-4"

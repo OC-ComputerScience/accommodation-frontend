@@ -64,7 +64,7 @@ async function getRequest() {
       year.value = request.value.semester.year;
       fName.value = request.value.student.fName;
       lName.value = request.value.student.lName;
-      getSelectedAccom(request.value.studentId, request.value.semesterId);
+      getSelectedAccom(request.value.student.ocStudentId, request.value.semesterId);
 
     })
     .catch((err) => {
@@ -76,10 +76,10 @@ async function getAccomCat() {
     .getAll()
     .then((response) => {
       accomCategory.value = response.data;
+      // remove the restricted categories
       accomCategory.value = response.data.filter(
         item =>
-          item.name !== "student_accommodation_request_received" &&
-          item.name !== "student_accommodation_approved"
+          item.restricted === false
       );
       subject.value = accomCategory.value.accomcat;
     })
@@ -143,6 +143,7 @@ async function save() {
   await requestServices.update(requestId, {
     approvedBy: user.fName + " " + user.lName,
     status: "Closed",
+    dateApproved: new Date(),
   });
 
   // Prepare data to send in email

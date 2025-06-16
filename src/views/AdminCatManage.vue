@@ -75,6 +75,7 @@ function addCat() {
             color="button_blue"
             style="float: right"
             @click="editCat(a.accomCatId)"
+            :disabled="a.restricted === true"
             >edit</v-btn
           >
         </td>

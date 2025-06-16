@@ -42,6 +42,7 @@ const handleCredentialResponse = async (response) => {
 
       if (role.value == "student") router.push({ name: "studentHome" });
       else if (role.value == "admin") router.push({ name: "adminHome" });
+      else if (role.value == "disabled") alert("Your account is disabled. Please contact admin.");
     })
     .catch((error) => {
       console.log("error", error);
