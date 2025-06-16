@@ -4,7 +4,7 @@ import UserServices from "../services/userServices.js";
 import router from "../router";
 
 const users = ref([]);
-const roles = ["admin", "student"];
+const roles = ["admin", "student", "disabled"];
 const select = ref([]);
 
 async function getUsers() {

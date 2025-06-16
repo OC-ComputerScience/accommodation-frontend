@@ -153,13 +153,17 @@ if (!student.value.studentId) {
 };
 
 const getStudentAccoms = async () => {
-  await StudentAccomServices.getAllForStudent(student.value.studentId)
+  await StudentAccomServices.getAllForStudent(student.value.ocStudentId)
     .then((response) => {
       studentAccoms.value = response.data;
       filteredSemesterAccoms.value = studentAccoms.value;
+      const semesterIdsInAccoms = studentAccoms.value.map(accom => accom.semesterId);
+      semesters.value = semesters.value.filter(semester =>
+        semesterIdsInAccoms.includes(semester.semesterId)
+      );
     })
     .catch((e) => {
-      console.log(e.response);
+      console.log(e);
     });
 };
 

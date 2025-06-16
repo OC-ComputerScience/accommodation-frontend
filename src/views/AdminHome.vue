@@ -108,7 +108,7 @@ const clearFilters = () => {
 };
 
 const formatDate = (date) => {
-  return moment(String(date)).format("DD/MM/YYYY"); // Changed format here
+  return moment(String(date)).format("MM/DD/YYYY"); // Changed format here
 };
 
 
@@ -128,6 +128,7 @@ const closeRequest = (request) => {
     status: "Closed",
     semester: request.semester,
     studendId: request.studentId,
+    dateApproved: new Date(),
   };
 
 
@@ -157,6 +158,7 @@ const closeRequest = (request) => {
           <th>Student ID</th>
           <th>Email</th>
           <th>Date Opened</th>
+          <th>Date Closed</th>
           <th></th>
         </tr>
       </thead>
@@ -166,6 +168,7 @@ const closeRequest = (request) => {
           <td student-id="{{request.studendId}}">{{ request.studentId }}</td>
           <td>{{ request.student.email }}</td>
           <td>{{ formatDate(request.dateMade) }}</td>
+          <td>{{ formatDate(request.dateApproved) }}</td>
           <td>
   <!-- Approve Request Button with spacing -->
    <v-btn 
@@ -289,6 +292,7 @@ const closeRequest = (request) => {
           <th>Student ID</th>
           <th>Email</th>
           <th>Date Opened</th>
+          <th>Date Closed</th>
           <th>Approved By</th>
         </tr>
       </thead>
@@ -299,6 +303,7 @@ const closeRequest = (request) => {
           <td>{{ request.studentId }}</td>
           <td>{{ request.student.email }}</td>
           <td>{{ formatDate(request.dateMade) }}</td>
+          <td>{{ formatDate(request.dateApproved) }}</td>
           <td>{{ request.approvedBy }}</td>
         </tr>
       </tbody>
