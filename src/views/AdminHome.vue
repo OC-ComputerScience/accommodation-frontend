@@ -165,7 +165,7 @@ const closeRequest = (request) => {
       <tbody>
         <tr v-for="request in openRequests" :key="request.studentId">
           <td>{{ `${request.student.fName} ${request.student.lName}` }}</td>
-          <td student-id="{{request.studendId}}">{{ request.studentId }}</td>
+          <td student-id="{{request.studendId}}">{{ request.student.ocStudentId }}</td>
           <td>{{ request.student.email }}</td>
           <td>{{ formatDate(request.dateMade) }}</td>
           <td>
@@ -299,7 +299,7 @@ const closeRequest = (request) => {
         <tr v-for="request in closedRequests" :key="request.id">
           <td>{{ request.semester.semester }}</td>
           <td>{{ `${request.student.fName} ${request.student.lName}` }}</td>
-          <td>{{ request.studentId }}</td>
+          <td>{{ request.student.ocStudentId }}</td>
           <td>{{ request.student.email }}</td>
           <td>{{ formatDate(request.dateMade) }}</td>
           <td>{{ formatDate(request.dateApproved) }}</td>
