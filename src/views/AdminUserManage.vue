@@ -71,7 +71,7 @@ function deleteUser(id) {
             v-model="select[index]"
           ></v-combobox>
         </td>
-        <td class="pa-4">{{ u.studentId }}</td>
+        <td class="pa-4">{{ u.student.ocStudentId || "N/A" }}</td>
         <td class="pa-4">
           <v-btn
             class="mr-4"
