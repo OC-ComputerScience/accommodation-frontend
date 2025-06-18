@@ -100,7 +100,7 @@ const clearFilters = () => {
 };
 
 const formatDate = (date) => {
-  return moment(String(date)).format("MM/DD/YYYY"); // Changed format here
+  return date ? moment(String(date)).format("MM/DD/YYYY") : "N/A"; // Changed format here
 };
 
 
@@ -150,7 +150,6 @@ const closeRequest = (request) => {
           <th>Student ID</th>
           <th>Email</th>
           <th>Date Opened</th>
-          <th>Date Closed</th>
           <th></th>
         </tr>
       </thead>
@@ -160,7 +159,6 @@ const closeRequest = (request) => {
           <td student-id="{{request.studendId}}">{{ request.studentId }}</td>
           <td>{{ request.student.email }}</td>
           <td>{{ formatDate(request.dateMade) }}</td>
-          <td>{{ formatDate(request.dateApproved) }}</td>
           <td>
   <!-- Approve Request Button with spacing -->
    <v-btn 

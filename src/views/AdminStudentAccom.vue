@@ -65,10 +65,11 @@
 
             let bridge = {
                 uName: student.fName + ' ' + student.lName,
-                id: student.studentId,
+                id: student.ocStudentId,
                 semester: semesterSeason + ' ' + semesterYear,
                 type: accommodation.title,
-                category: accommodation.categoryName
+                category: accommodation.categoryName,
+                status: currentValue.status
             };
             tableData.value.push(bridge);
         });
@@ -155,6 +156,7 @@ onMounted(async () => {
                         <th>Semester</th>
                         <th>Accommodation</th> 
                         <th>Category</th>
+                        <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -166,6 +168,7 @@ onMounted(async () => {
                         <td>{{ data.semester }}</td>
                         <td>{{ data.type }}</td>
                         <td>{{ data.category }}</td>
+                        <td>{{ data.status }}</td>
                         </tr>
                     </tbody>
                     </v-table>
