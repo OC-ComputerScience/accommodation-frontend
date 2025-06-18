@@ -6,8 +6,8 @@ const props = defineProps({
 	lName: String
 })
 const selectedDisplay = props.accommodations
-	.map((accom, index) => {
-		if (props.selectedAccoms[index + 1]) {
+	.map((accom) => {
+		if (props.selectedAccoms[accom.accomId]) {
 			return `${accom.categoryName}: ${accom.title}`;
 		}
 		return null;

@@ -31,15 +31,7 @@ onMounted(async () => {
 const getSemesters = async () => {
   await SemesterServices.getAllSemesters().then((response) => {
     semesters.value = response.data;
-    const today = new Date();
-    const currentSemester = semesters.value.find(semester => {
-      const startDate = new Date(semester.startDate);
-      const endDate = new Date(semester.endDate);
-      return today >= startDate && today <= endDate;
-    });
-
-    // Set the filter to current semester, or fallback to first semester if none found
-    semesterFilter.value = currentSemester || semesters.value[0];
+    semesterFilter.value = semesters.value[0];
   });
 };
 
@@ -108,7 +100,7 @@ const clearFilters = () => {
 };
 
 const formatDate = (date) => {
-  return moment(String(date)).format("MM/DD/YYYY"); // Changed format here
+  return date ? moment(String(date)).format("MM/DD/YYYY") : "N/A"; // Changed format here
 };
 
 
@@ -158,7 +150,6 @@ const closeRequest = (request) => {
           <th>Student ID</th>
           <th>Email</th>
           <th>Date Opened</th>
-          <th>Date Closed</th>
           <th></th>
         </tr>
       </thead>
@@ -168,7 +159,6 @@ const closeRequest = (request) => {
           <td student-id="{{request.studendId}}">{{ request.studentId }}</td>
           <td>{{ request.student.email }}</td>
           <td>{{ formatDate(request.dateMade) }}</td>
-          <td>{{ formatDate(request.dateApproved) }}</td>
           <td>
   <!-- Approve Request Button with spacing -->
    <v-btn 

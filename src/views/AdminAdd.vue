@@ -35,6 +35,7 @@ async function getAccomm() {
       accommodations.value.forEach((accomm) => {
         accomm.chapelChkBox = false;
       });
+      accommodations.value = accommodations.value.filter(item => item.status === "active");
     })
     .catch((err) => {
       console.log(err);
@@ -45,7 +46,7 @@ function getSelectedAccom(studentId, semesterId) {
   studentAccomServices
     .getAllForStudent(studentId)
     .then((response) => {
-      selectedAccoms.value = response.data.filter(item => item.semesterId === semesterId && item.status === "Approved").map(item => item.accomId);
+      selectedAccoms.value = response.data.filter(item => item.semesterId === semesterId && item.status === "Approved" && item.accommodation.status === "active").map(item => item.accomId);
       selectedAccoms.value.forEach(id => {
         selectedAccommodations.value[id] = true;
       })
