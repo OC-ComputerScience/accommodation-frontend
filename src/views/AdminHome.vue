@@ -31,7 +31,16 @@ onMounted(async () => {
 const getSemesters = async () => {
   await SemesterServices.getAllSemesters().then((response) => {
     semesters.value = response.data;
-    semesterFilter.value = semesters.value[0];
+    // Get current semester based on today's date
+    const today = new Date();
+    const currentSemester = semesters.value.find(semester => {
+    const startDate = new Date(semester.startDate);
+    const endDate = new Date(semester.endDate);
+    return today >= startDate && today <= endDate;
+  });
+  
+  // Set the filter to current semester, or fallback to first semester if none found
+  semesterFilter.value = currentSemester || semesters.value[0];
   });
 };
 
