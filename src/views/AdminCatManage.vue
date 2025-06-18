@@ -65,13 +65,6 @@ function addCat() {
         <td>
           <v-btn
             class="mr-4"
-            color="primary"
-            style="float: right"
-            @click="deleteCat(a.accomCatId)"
-            >delete</v-btn
-          >
-          <v-btn
-            class="mr-4"
             color="button_blue"
             style="float: right"
             @click="editCat(a.accomCatId)"

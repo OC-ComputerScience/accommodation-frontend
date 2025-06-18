@@ -94,13 +94,6 @@ function addEmail() {
             @click="editEmail(a.emailMessageId)"
             >edit</v-btn
           >
-          <v-btn
-            class="mr-4"
-            color="primary"
-            style="float: right"
-            @click="deleteEmailMessage(a.emailMessageId)"
-            >delete</v-btn
-          >
         </td>
       </tr>
     </v-table>

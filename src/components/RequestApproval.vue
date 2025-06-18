@@ -1,7 +1,9 @@
 <script setup>
 const props = defineProps({
 	selectedAccoms: Object,
-	accommodations: Object
+	accommodations: Object,
+	fName: String,
+	lName: String
 })
 const selectedDisplay = props.accommodations
 	.map((accom) => {
@@ -16,7 +18,10 @@ const selectedDisplay = props.accommodations
 <template>
 	<v-card elevation="5" rounded="lg">
 		<v-container>
-			<v-card-title>Are you sure you want to save?</v-card-title>
+			<v-card-title>
+				Student : 
+				<span class="font-weight-bold">{{ fName }} {{ lName }}</span>
+			</v-card-title>
 			<v-card-text>
 				<div>You are about to add these accommodations:</div>
 				<div v-for="item in selectedDisplay" :key="item" class="ml-4">{{ item }}</div>
@@ -24,7 +29,7 @@ const selectedDisplay = props.accommodations
 			</v-card-text>
 			<v-card-actions>
 				<v-btn class="ml-4" color="blue" style="float: right" elevation="5" @click="$emit('save')">
-					Add
+					Approve
 				</v-btn>
 				<v-btn flat @click="$emit('cancel')">
 					Cancel

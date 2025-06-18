@@ -12,7 +12,7 @@ const props = defineProps({
 let semester = ref("");
 let semesterRules = [
   (value) => !!value || "Semester is required",
-  (value) => /^[A-Z]{2}\d{4}$/.test(value) || "Use XXYYYY must be valid",
+  (value) => /^(FA|WI|SU|SP)\d{4}$/.test(value) || "Use FA, WI, SU, or SP followed by 4 digits (e.g., FA2024)",
 ];
 
 let dateRules = [
@@ -40,6 +40,11 @@ onMounted(async () => {
 });
 
 function save() {
+  const isValid = semesterRules.every(rule => rule(semester.value.semester) === true);
+  if (!isValid) {
+    alert("fill out the form correctly");
+    return;
+  }
   let semesterDat = semester.value;
 
   SemesterServices.updateSemester(props.semesterId, semesterDat);
