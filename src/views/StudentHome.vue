@@ -157,10 +157,6 @@ const getStudentAccoms = async () => {
     .then((response) => {
       studentAccoms.value = response.data;
       filteredSemesterAccoms.value = studentAccoms.value;
-      const semesterIdsInAccoms = studentAccoms.value.map(accom => accom.semesterId);
-      semesters.value = semesters.value.filter(semester =>
-        semesterIdsInAccoms.includes(semester.semesterId)
-      );
     })
     .catch((e) => {
       console.log(e);
