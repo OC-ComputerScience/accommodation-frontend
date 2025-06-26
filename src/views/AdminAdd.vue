@@ -25,6 +25,7 @@ const subject = ref();
 let user = Utils.getStore("user");
 const approval = ref(false);
 const selectedAccoms = ref(null);
+const initialAccommodations = ref({});
 
 
 async function getAccomm() {
@@ -46,10 +47,17 @@ function getSelectedAccom(studentId, semesterId) {
   studentAccomServices
     .getAllForStudent(studentId)
     .then((response) => {
-      selectedAccoms.value = response.data.filter(item => item.semesterId === semesterId && item.status === "Approved" && item.accommodation.status === "active").map(item => item.accomId);
+      // When initializing selectedAccommodations
+      selectedAccoms.value = response.data.filter(item =>
+        item.semesterId === semesterId &&
+        item.status === "Approved" &&
+        item.accommodation.status === "active"
+      ).map(item => item.accomId);
+
       selectedAccoms.value.forEach(id => {
         selectedAccommodations.value[id] = true;
-      })
+        initialAccommodations.value[id] = true; // Store initial state
+      });
     })
     .catch((err) => {
       console.log(err);
@@ -109,9 +117,20 @@ async function save() {
   let isAcademicsSelected = false;
 
   const studentAccoms = [];
-
+  // When saving, only process changed accommodations
+  const changedAccommodations = {};
   for (const accomId in selectedAccommodations.value) {
-    if (selectedAccommodations.value[accomId]) {
+    const currentValue = selectedAccommodations.value[accomId];
+    const initialValue = initialAccommodations.value[accomId] || false;
+
+    if (currentValue !== initialValue) {
+      changedAccommodations[accomId] = currentValue;
+    }
+  }
+
+  // Now only process the changed ones
+  for (const accomId in changedAccommodations) {
+    if (changedAccommodations[accomId] !== null) {
       const accom = findAccomById(parseInt(accomId));
       if (!accom) continue;
 
@@ -121,7 +140,8 @@ async function save() {
         data: null,
         semesterId: request.value.semesterId,
         studentId: request.value.studentId,
-        adminId: Utils.getStore("user").userId
+        adminId: Utils.getStore("user").userId,
+        status: changedAccommodations[accomId] ? "Approved" : "Removed"
       });
 
       if (["Chapel", "Meals", "Housing"].includes(accom.categoryName)) {
@@ -143,7 +163,7 @@ async function save() {
 
   await requestServices.update(requestId, {
     approvedBy: user.fName + " " + user.lName,
-    status: "Closed",
+    status: "Approved",
     dateApproved: new Date(),
   });
 

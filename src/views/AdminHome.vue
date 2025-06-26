@@ -63,7 +63,7 @@ const getOpenRequests = async () => {
 };
 
 const getClosedRequests = async () => {
-  const response = await RequestServices.getAllForStatus("Closed");
+  const response = await RequestServices.getAllForStatus("Approved");
   closedRequests.value = response.data;
   unfilteredClosedRequests.value = response.data;
   closedReqBool.value = response.data.length > 0;
@@ -126,7 +126,7 @@ const closeRequest = (request) => {
     requestId: request.requestId,
     dateMade: request.dateMade,
     approvedBy: null,
-    status: "Closed",
+    status: "Denied",
     semester: request.semester,
     studendId: request.studentId,
     dateApproved: new Date(),
