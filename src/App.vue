@@ -15,9 +15,10 @@ import router from "./router";
   <v-app>
     <v-main>
       <MenuBar v-if="$route.fullPath != '/'" />
-      <v-container>
+      <v-container v-if="$route.fullPath != '/'">
         <router-view :key="$route.fullPath"></router-view>
       </v-container>
+      <router-view v-else :key="$route.fullPath"></router-view>  
     </v-main>
   </v-app>
 </template>
