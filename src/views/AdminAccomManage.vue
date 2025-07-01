@@ -64,6 +64,7 @@ async function save() {
 
   let accomData = {
     categoryName: select.value,
+    accomCatId: accomCategory.value.find((item) => item.name == select.value).accomCatId,
     title: textTitle.value,
     description: textDescription.value,
     explanationFile: "",
