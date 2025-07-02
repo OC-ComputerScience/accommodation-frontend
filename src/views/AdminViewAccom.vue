@@ -27,7 +27,7 @@ async function getAccomCats() {
   }
 }
 function setCategories() {
-  const uniqueCategories = new Set(cats.value.map((item) => item.name));
+  const uniqueCategories = new Set(cats.value.filter((item) => item.restricted == false).map((item) => item.name));
   cats.value = Array.from(uniqueCategories).map((name) => ({ name }));
 }
 function setDefaultCatValues() {
