@@ -28,7 +28,8 @@ async function getAccomCat() {
 }
 
 function setCatNames() {
-  catNames.value = accomCategory.value.map((item) => item.name);
+  catNames.value = accomCategory.value.filter((item) => item.restricted == false);
+  catNames.value = catNames.value.map((item) => item.name);
 }
 
 const uploadExplanationFile = async () => {
