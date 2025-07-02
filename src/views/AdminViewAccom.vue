@@ -91,28 +91,28 @@ function editAccom(x) {
           ></v-combobox>
         </td>
         <td class="pa-4">
-          <v-btn
-            class="mr-4"
-            color="primary"
-            style="float: right; min-width: 10em;"
-            @click="changeStatus(a)"
-            > {{a.status === "active" ? "deactivate" : "activate"}}</v-btn
-          >
-          <v-btn
-            class="mr-4"
-            color="button_blue"
-            style="float: right"
-            @click="save(a, index)"
-            >save</v-btn
-          >
-          <v-btn
-            class="mr-4"
-            color="button_blue"
-            style="float: right"
-            @click="editAccom(a.accomId)"
-            >edit</v-btn
-          >
-        </td>
+  <div class="d-flex flex-wrap justify-end ga-2">
+    <v-btn
+      color="primary"
+      style="min-width: 10em;"
+      @click="changeStatus(a)"
+    >
+      {{ a.status === "active" ? "deactivate" : "activate" }}
+    </v-btn>
+    <v-btn
+      color="button_blue"
+      @click="save(a, index)"
+    >
+      save
+    </v-btn>
+    <v-btn
+      color="button_blue"
+      @click="editAccom(a.accomId)"
+    >
+      edit
+    </v-btn>
+  </div>
+</td>
       </tr>
     </v-table>
   </div>
