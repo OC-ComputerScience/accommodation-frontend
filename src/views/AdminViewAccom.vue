@@ -32,6 +32,18 @@ function setCategories() {
 }
 function setDefaultCatValues() {
   select.value = accoms.value.map((accom) => accom.categoryName);
+  // Create paired arrays for sorting
+  const paired = accoms.value.map((accom, index) => ({
+    accom,
+    category: select.value[index] || ''
+  }));
+  
+  // Sort by category
+  paired.sort((a, b) => a.category.localeCompare(b.category));
+  
+  // Update both arrays
+  accoms.value = paired.map(item => item.accom);
+  select.value = paired.map(item => item.category);
 }
 onMounted(async () => {
   await getAccommodations();
