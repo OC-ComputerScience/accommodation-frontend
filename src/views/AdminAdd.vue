@@ -9,6 +9,7 @@ import accommServices from "../services/accommodationServices.js";
 import requestServices from "../services/requestServices.js";
 import studentAccomServices from "../services/studentAccomServices";
 import utilServices from "../services/utilServices";
+import InformationComponent from "../components/InformationComponent.vue";
 
 
 const accommodations = ref([]);
@@ -246,8 +247,14 @@ function findAccomById(id) {
         <div>
           <v-card class="rounded-0" style="background-color: #d5dfe7">
             <div v-for="a in accommodations" :key="a.id">
-              <v-checkbox v-if="a.categoryName == ac.name" v-model="selectedAccommodations[a.accomId]" :value="a.id"
-                :label="a.title" color="primary" style="font-weight: bold; color: black">
+              <v-checkbox v-if="a.categoryName === ac.name" v-model="selectedAccommodations[a.accomId]" :value="a.id"
+                color="primary" style="font-weight: bold; color: black;">
+                <template #label>
+                  {{ a.title }}
+                  <InformationComponent
+                    :message="a.description"
+                    style="margin-left: 8px;" />
+                </template>
               </v-checkbox>
             </div>
           </v-card>
