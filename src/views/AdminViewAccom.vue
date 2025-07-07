@@ -1,12 +1,31 @@
 <script setup>
 import AccommodationServices from "../services/accommodationServices.js";
 import accomCatServices from "../services/accomCatServices";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import router from "../router";
 
 const accoms = ref([]);
 const cats = ref([]);
 const select = ref([]);
+const selectedCategoryFilter = ref('');
+
+const categoryFilterOptions = computed(() => {
+  const uniqueCategories = [...new Set(accoms.value.map(accom => accom.categoryName).filter(Boolean))];
+  return ['All Categories', ...uniqueCategories.sort()];
+});
+
+// Update your computed property to track original indices
+const filteredAccoms = computed(() => {
+  let filtered;
+  if (!selectedCategoryFilter.value || selectedCategoryFilter.value === 'All Categories') {
+    filtered = accoms.value.map((accom, index) => ({ ...accom, originalIndex: index }));
+  } else {
+    filtered = accoms.value
+      .map((accom, index) => ({ ...accom, originalIndex: index }))
+      .filter(accom => accom.categoryName === selectedCategoryFilter.value);
+  }
+  return filtered;
+});
 
 async function getAccommodations() {
   try {
@@ -82,6 +101,18 @@ function editAccom(x) {
     >
   </v-row>
 
+  <div class="filter-section pa-4">
+    <v-select
+      v-model="selectedCategoryFilter"
+      :items="categoryFilterOptions"
+      label="Filter by Category"
+      clearable
+      dense
+      outlined
+      width="30%"
+    ></v-select>
+  </div>
+
   <div class="pa-4">
     <v-table>
       <thead>
@@ -92,14 +123,14 @@ function editAccom(x) {
         </tr>
       </thead>
 
-      <tr v-for="(a, index) in accoms" style="background-color: #d5dfe7">
+      <tr v-for="(a, index) in filteredAccoms" :key="a.originalIndex" style="background-color: #d5dfe7">
         <td class="pa-4">{{ a.title }}</td>
         <td>{{ a.description }}</td>
         <td>
           <v-combobox
             :items="cats.map((cat) => cat.name)"
             label="category"
-            v-model="select[index]"
+            v-model="select[a.originalIndex]"
           ></v-combobox>
         </td>
         <td class="pa-4">
@@ -113,7 +144,7 @@ function editAccom(x) {
     </v-btn>
     <v-btn
       color="button_blue"
-      @click="save(a, index)"
+      @click="save(a, a.originalIndex)"
     >
       save
     </v-btn>
