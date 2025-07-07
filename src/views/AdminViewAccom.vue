@@ -75,13 +75,13 @@ function save(a, index) {
     categoryName: select.value[index],
   };
   AccommodationServices.update(a.accomId, accomData);
-  this.router.go();
+  router.go();
 }
 function changeStatus(data) {
   if (data.status == "Inactive") data.status = "active";
   else data.status = "Inactive";
   AccommodationServices.update(data.accomId, data)
-  this.router.go();
+  router.go();
 }
 function newAccom() {
   router.push({ name: "adminAccomManage" });
