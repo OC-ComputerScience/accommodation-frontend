@@ -32,7 +32,7 @@ const filteredSemesters = computed(() => {
       width="20rem"
       style="padding-bottom: 16px; padding-left: 16px"
     >
-      <v-card-title>Create New Request</v-card-title>
+      <v-card-title>Select The Semester</v-card-title>
       <v-combobox
         v-model="selectedSemId"
         label="Semester"

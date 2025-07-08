@@ -204,6 +204,12 @@ v-show="isVisible"
   
     <div>
       <p class="text-h6 text-left">Hello, {{ user.fName }}!</p>
+      <v-card-text class="my-1 text-body-1 text-center">
+        Using this system, you can request <strong>academic</strong>, <strong>chapel</strong>, and
+        <strong>housing accommodations</strong> to support your experience at OC. <br>
+        After submitting a request, you will receive an email with a link that includes documentation
+        instructions and information on how to schedule an appointment with Student Success.
+      </v-card-text>
       <p class="text-h6 mt-4 text-left">
         My Requests
         <v-btn
