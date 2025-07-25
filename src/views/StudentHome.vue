@@ -23,6 +23,7 @@ const filteredSemesterAccoms = ref([]);
 const isVisible = ref(false);
 const openRequestCount = ref(0);
 const selectedSemId = ref();
+const isReqWithinOneYear = ref(false);
 
 const semesters = ref([]);
 
@@ -38,6 +39,7 @@ onBeforeMount(async () => {
   await getSemesters();
   await updateOpenRequestCount();
   await getStudentAccoms();
+  await getLatestApprovedRequest();
 });
 
 const getSemesters = async () => {
@@ -49,6 +51,29 @@ const getSemesters = async () => {
       console.log(e.response);
     });
 };
+
+const getLatestApprovedRequest = async () => {
+  await RequestServices.findLatestApproved(
+    user.value.studentId
+  ).then((response) => {
+    const dateApproved = new Date(response.data.dateApproved);
+    const today = new Date();
+
+    // Calculate the time difference
+    const oneYearLater = new Date(dateApproved);
+    oneYearLater.setFullYear(oneYearLater.getFullYear() + 1);
+
+    // Check: is today after dateApproved AND before or equal to oneYearLater
+    isReqWithinOneYear.value =
+      today >= dateApproved && today <= oneYearLater;
+
+    console.log(isReqWithinOneYear.value); // true or false
+
+  }) 
+  .catch((e) => {
+    console.log(e.response);
+  })
+}
 
 //STUDENT noPermission METHODS
 
@@ -120,8 +145,8 @@ const addConsent = async (ocStudentId) => {
 //END STUDENT noPermission METHODS
 
 //CREATE REQUEST METHODS
-const handleCreate = (selectedSemId) => {
-  createRequest(selectedSemId);
+const handleCreate = (selectedSemId, approvalType='manual') => {
+  createRequest(selectedSemId, approvalType);
   requestForm.value = false;
   isVisible.value = true;
 };
@@ -131,16 +156,17 @@ const toggleClose = () => {
   console.log(isVisible.value);
 }
 
-const createRequest = async (selectedSemId) => {
+const createRequest = async (selectedSemId, approvalType) => {
 
-if (!student.value.studentId) {
-  console.error("Error: studentId is undefined. Cannot create request.");
-  return;
-}
+  if (!student.value.studentId) {
+    console.error("Error: studentId is undefined. Cannot create request.");
+    return;
+  }
   const data = {
     semesterId: selectedSemId.semesterId,
     studentId: student.value.studentId,
     email: student.value.email,
+    approvalType: approvalType
   };
 
   await RequestServices.create(data)
@@ -258,6 +284,7 @@ v-show="isVisible"
     <v-dialog v-model="requestForm" width="auto">
       <RequestForm
         :semesters="semesters"
+        :isReqWithinOneYear="isReqWithinOneYear"
         @createRequest="handleCreate"
         @cancel="requestForm = false"
       />

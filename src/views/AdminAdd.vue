@@ -166,6 +166,7 @@ async function save() {
     approvedBy: user.fName + " " + user.lName,
     status: "Approved",
     dateApproved: new Date(),
+    type:"manual"
   });
 
   // Prepare data to send in email

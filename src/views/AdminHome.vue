@@ -130,6 +130,7 @@ const closeRequest = (request) => {
     semester: request.semester,
     studendId: request.studentId,
     dateApproved: new Date(),
+    type: "manual",
   };
 
 

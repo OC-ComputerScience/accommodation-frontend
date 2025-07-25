@@ -14,6 +14,9 @@ export default{
     getAllForStatus(status, semesterId, studentId){
         return apiClient.get(baseURL + `statusReq/${status}`);
     },
+    findLatestApproved(studentId){
+        return apiClient.get(baseURL + `latestApproved/${studentId}`);
+    },
     create(data){
         return apiClient.post(baseURL, data);
     },
