@@ -1,7 +1,10 @@
 <script setup>
 import { ref, computed } from "vue";
 const emit = defineEmits(['createRequest', 'cancel'])
+import RequestServices from "../services/requestServices";
+import Utils from "../config/utils";
 
+const user = ref(Utils.getStore("user"));
 const selectedSemId = ref(null);
 const props = defineProps({
   semesters: Array,
@@ -26,9 +29,19 @@ const filteredSemesters = computed(() => {
       return yearA - yearB;
     });
 });
-const handleSubmit = () => {
+const handleSubmit = async () => {
+  const data = {
+    studentId: user.value.studentId,
+    semesterId: selectedSemId.value.semesterId
+  }
+  const isReqWithinOneYear = ref(props.isReqWithinOneYear);
 
-  if (props.isReqWithinOneYear) {
+  await RequestServices.checkIfAuto(data).then((response) => {
+    isReqWithinOneYear.value = response.data
+  });
+
+
+  if (isReqWithinOneYear.value) {
     showModal.value = true;
   } else {
     // Proceed with normal submit
