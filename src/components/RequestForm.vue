@@ -53,6 +53,7 @@ const handleSubmit = async () => {
 const selectApprovalType = (approvalType) => {
   showModal.value = false;
   // Emit the createRequest event with the selected approval type
+  console.log("Selected approval type:", approvalType);
   emit('createRequest', selectedSemId.value, approvalType);
 }
 </script>
