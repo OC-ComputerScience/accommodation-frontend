@@ -168,6 +168,7 @@ const createRequest = async (selectedSemId, approvalType) => {
     email: student.value.email,
     approvalType: approvalType
   };
+  console.log(data);
 
   await RequestServices.create(data)
     .then((response) => {})
