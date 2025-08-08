@@ -67,10 +67,9 @@ const getLatestApprovedRequest = async () => {
     isReqWithinOneYear.value =
       today >= dateApproved && today <= oneYearLater;
 
-    console.log(isReqWithinOneYear.value); // true or false
-
   }) 
   .catch((e) => {
+    isReqWithinOneYear.value = false;
     console.log(e.response);
   })
 }
@@ -153,7 +152,6 @@ const handleCreate = (selectedSemId, approvalType='manual') => {
 
 const toggleClose = () => {
   isVisible.value = false;
-  console.log(isVisible.value);
 }
 
 const createRequest = async (selectedSemId, approvalType) => {
@@ -173,7 +171,7 @@ const createRequest = async (selectedSemId, approvalType) => {
   await RequestServices.create(data)
     .then((response) => {})
     .catch((e) => {
-      console.log(e.response);
+      console.log(e.response.data.message);
     });
 
   updateOpenRequestCount();

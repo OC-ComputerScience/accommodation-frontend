@@ -37,7 +37,7 @@ const handleSubmit = async () => {
   const isReqWithinOneYear = ref(props.isReqWithinOneYear);
 
   await RequestServices.checkIfAuto(data).then((response) => {
-    isReqWithinOneYear.value = response.data
+    isReqWithinOneYear.value = response.data && props.isReqWithinOneYear
   });
 
 
