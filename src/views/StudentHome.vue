@@ -242,6 +242,7 @@ v-show="isVisible"
           class="mr-15"
           rounded="lg"
           elevation="2"
+          :disabled="openRequestCount >= 1"
           style="background-color: #118acb; color: white; float: right"
         >
           MAKE A REQUEST
